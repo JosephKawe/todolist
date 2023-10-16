@@ -57,7 +57,7 @@ public class TaskController {
         var task = this.taskRepository.findById(id).orElse(null);
 
         if(task == null) {
-            return ResponseEntity.ok().body(this.taskRepository.save("Tarefa não encontrada"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Tarefa não encontrada  ");
         }
         
         var idUser = request.getAttribute("idUser");  // Convertemos para UUID
