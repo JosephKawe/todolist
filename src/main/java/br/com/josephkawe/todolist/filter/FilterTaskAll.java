@@ -21,14 +21,15 @@ public class FilterTaskAll extends OncePerRequestFilter {
     private IUserRepository userRepository;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+        throws ServletException, IOException {
 
-        var servLetPath = request.getServletPath();
+    var servLetPath = request.getServletPath();
 
-        if (servLetPath.startsWith("/tasks/")) {
-            var authorization = request.getHeader("Authorization");
+    if (servLetPath.startsWith("/tasks/")) {
+        var authorization = request.getHeader("Authorization");
 
+        if (authorization != null && authorization.startsWith("Basic")) {
             var authEncoded = authorization.substring("Basic".length()).trim();
 
             byte[] authDecode = Base64.getDecoder().decode(authEncoded);
@@ -43,7 +44,6 @@ public class FilterTaskAll extends OncePerRequestFilter {
             if (user == null) {
                 response.sendError(401);
             } else {
-
                 var passwordVerify = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword());
 
                 if (passwordVerify.verified) {
@@ -52,12 +52,13 @@ public class FilterTaskAll extends OncePerRequestFilter {
                 } else {
                     response.sendError(401);
                 }
-
             }
         } else {
-            filterChain.doFilter(request, response);
+            response.sendError(401);
         }
-
+    } else {
+        filterChain.doFilter(request, response);
     }
+}
 
 }
