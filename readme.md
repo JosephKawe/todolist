@@ -38,7 +38,7 @@ Execute o aplicativo Spring Boot a partir da classe principal `TodoListApplicati
 mvn spring-boot:run
 ```
 
-O aplicativo estará disponível em `http://localhost:8080`.
+O aplicativo estará disponível em `https://todolist-docker.onrender.com/`.
 
 ## Endpoints da API
 
